@@ -1,41 +1,39 @@
-class Container extends PWH implements IOverlay {
-	Object item;
+class Container extends SizedWidget {
+	Widget child;
 	boolean autocolor = true;
 	color _color;
 	boolean selectable = true;
 
-	Container() {
+	Container(Widget child) {
+		this.child = child;
 	}
-	Container(Object item) {
-		this.item = item;
-	}
-	Container(Object item, int _width, int _height) {
-		this.item = item;
-		Box b = getItemBoundary(item);
+	Container(Widget child, int _width, int _height) {
+		this.child = child;
+		Box b = child.getBoundary();
 		setWH(max(round(b.w), _width), max(round(b.h), _height));
 	}
-	Container(Object item, int _width, int _height, color _color) {
-		this(item, _width, _height);
+	Container(Widget child, int _width, int _height, color _color) {
+		this(child, _width, _height);
 		this._color = _color;
 		this.autocolor = false;
 	}
-	Container(Object item, int _width, int _height, color _color, boolean selectable) {
-		this(item, _width, _height, _color);
+	Container(Widget child, int _width, int _height, color _color, boolean selectable) {
+		this(child, _width, _height, _color);
 		this.selectable = selectable;
 	}
 
-	boolean mousePressed() {
-		mousePressedItem(item);
+	@Override boolean mousePressed() {
+		child.mousePressed();
 		return isHit();
 	}
-	boolean mouseDragged() {
-		return mouseDraggedItem(item);
+	@Override boolean mouseDragged() {
+		return child.mouseDragged();
 	}
-	boolean mouseWheel(MouseEvent e) {
-		return mouseWheelItem(item, e);
+	@Override boolean mouseWheel(MouseEvent e) {
+		return child.mouseWheel(e);
 	}
-	void keyPressed() {
-		keyPressedItem(item);
+	@Override void keyPressed() {
+		child.keyPressed();
 	}
 
 	void draw(boolean hit) {
@@ -43,7 +41,7 @@ class Container extends PWH implements IOverlay {
 		noStroke();
 		rect(xpos, ypos, _width, _height);
 		boolean h = hit && isHit();
-		drawItem(item, h);
+		child.draw(h);
 		if(h && selectable) {
 			fill(c[8], 50);
 			noStroke();
@@ -58,7 +56,7 @@ class Container extends PWH implements IOverlay {
 	void setXY(int xpos, int ypos) {
 		this.xpos = xpos;
 		this.ypos = ypos;
-		recalculateItems();
+		recalculateWidgets();
 	}
 
 	void setWH(int _width, int _height) {
@@ -66,12 +64,12 @@ class Container extends PWH implements IOverlay {
 			this._width = _width;
 			this._height = _height;
 		}
-		recalculateItems();
+		recalculateWidgets();
 	}
 
-	void recalculateItems() {
-		setItemXY(item, xpos, ypos);
-		setItemWH(item, _width, _height);
+	void recalculateWidgets() {
+		child.setXY(xpos, ypos);
+		child.setWH(_width, _height);
 	}
 
 	boolean isHit() {

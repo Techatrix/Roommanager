@@ -1,4 +1,4 @@
-abstract class CheckBox extends PWH implements IOverlay {
+abstract class CheckBox extends SizedWidget {
 	String text;
 	boolean value;
 	int align;

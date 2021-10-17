@@ -1,4 +1,10 @@
-class Furniture extends RPWH {
+class Furniture {
+	int xpos = 0;
+	int ypos = 0;
+	int _width = 0;
+	int _height = 0;
+	int rot = 0;
+
 	int id;								// id of the furniture
 	int price;							// price of the furniture
 	color tint = color(255,255,255);	// tint color of the furniture

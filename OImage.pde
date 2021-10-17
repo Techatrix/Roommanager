@@ -1,4 +1,4 @@
-class Image extends PWH implements IOverlay {
+class Image extends SizedWidget {
 	PImage image;
 	Fit fit;
 	color tint;

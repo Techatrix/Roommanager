@@ -65,64 +65,12 @@ class ApplicationManager {
 
 	void setFont(String newfontname) { // sets the current font
 		newfontname = newfontname.toLowerCase();
-		/*  checks if the newfontname is any variant of Roboto (default font on Android and developed by Google)
-		 *  would also work without but would require to execute a thread so it can save some time
-		 */ 
-		boolean isroboto = false;
-
-		String[] robotofontnames = {"roboto", "roboto black","roboto black italic", "roboto bold", "roboto bold italic", "roboto italic", "roboto light", "roboto light italic", "roboto medium", "roboto medium italic", "roboto thin",  "roboto thin italic"};
-		for (String robotofont : robotofontnames) {
-			if(robotofont.equals(newfontname)) {
-				isroboto = true;
-				break;
-			}
-		}
-		if(isroboto) {
-			String newfont = "data/assets/font/Roboto";
-			String[] keywords = split(newfontname, " ");
-
-			if(keywords.length > 1) {
-				switch(keywords[1]) {
-					case "black":
-					newfont += "-Black";
-					break;
-					case "bold":
-					newfont += "-Bold";
-					break;
-					case "light":
-					newfont += "-Light";
-					break;
-					case "medium":
-					newfont += "-Medium";
-					break;
-					case "thin":
-					newfont += "-Thin";
-					break;
-					case "italic":
-					newfont += "-RegularItalic";
-					break;
-				}
-				if(keywords.length > 2) {
-					if(keywords[2].equals("italic")) {
-						newfont += "Italic";
-					}
-				}
-			} else {
-				newfont += "-Regular";
-			}
-			newfont += ".ttf";
-			font = createFont(newfont, 16);
-			textFont(font);
-			if(usegl) {
-				pg.textFont(font);
-			}
-		} else { // execute setfontrawthread on a separate thread to not hang the main thread
-			setfontrawinput = newfontname;
-			thread("setfontrawthread");
-		}
+		
+		setfontrawinput = newfontname;
+		thread("setFontRawThread");
 	}
 
-	void setFontRaw() { // uses the chosen font if available or fall back to the default font (Roboto Regular)
+	void setFontRaw() { // uses the chosen font if available or fall back to the default font
 		boolean hit = false;
 		String[] fontnames = PFont.list();
 		for (String fontname : fontnames) {
@@ -132,9 +80,9 @@ class ApplicationManager {
 			}
 		}
 		if(hit) {
-			font = createFont(setfontrawinput, 16);
+			font = createFont(setfontrawinput, 32);
 		} else {
-			font = createFont("data/assets/font/Roboto-Regular.ttf", 16);
+			font = createFont("Arial", 32);
 		}
 		textFont(font);
 		if(usegl) {

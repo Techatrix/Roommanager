@@ -1,48 +1,35 @@
-abstract class Dynamic extends PWH implements IOverlay {
-	Object item;
+abstract class Dynamic extends SizedWidgetAdapter {
+	Widget child;
+	boolean hasSetXY = false;
+	boolean hasSetWH = false;
 
 	Dynamic() {
-		item = getItem();
+		child = getWidget();
 	}
 
-	boolean mousePressed() {
-		return mousePressedItem(item);
-	}
-	boolean mouseDragged() {
-		return mouseDraggedItem(item);
-	}
-	boolean mouseWheel(MouseEvent e) {
-		return mouseWheelItem(item, e);
-	}
-	void keyPressed() {
-		keyPressedItem(item);
+	Widget getAdapter() { return child; }
+
+	abstract Widget getWidget();
+
+	@Override void draw(boolean hit) {
+		child = getWidget();
+		if(hasSetXY) child.setXY(xpos, ypos);
+		if(hasSetWH) child.setXY(_width, _height);
+		child.draw(hit);
 	}
 
-	abstract Object getItem();
-
-	void draw(boolean hit) {
-		item = getItem();
-		setItemXY(item, xpos, ypos);
-		setItemWH(item, _width, _height);
-		drawItem(item, hit);
-	}
-
-	Box getBoundary() {
-		return getItemBoundary(item);
-	}
-	
-	boolean isHit() {
-		return getisItemHit(item);
-	}
-
-	void setXY(int xpos, int ypos) {
+	@Override void setXY(int xpos, int ypos) {
+		hasSetXY = true;
 		this.xpos = xpos;
 		this.ypos = ypos;
+		super.setXY(xpos, ypos);
 	}
 
-	void setWH(int _width, int _height) {
+	@Override void setWH(int _width, int _height) {
+		hasSetWH = true;
 		this._width = _width;
 		this._height = _height;
+		super.setWH(_width, _height);
 	}
 	
 }

@@ -1,4 +1,4 @@
-class SizedBox extends PWH implements IOverlay {
+class SizedBox extends SizedWidget {
 	boolean expand;
 	//TODO flex parameter
 

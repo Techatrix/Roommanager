@@ -1,58 +1,56 @@
-abstract class Visible implements IOverlay {
-	Object item;
+abstract class Visible extends SizedWidget {
+	Widget child;
 	
-	Visible() {
-	}
-	Visible(Object item) {
-		this.item = item;
+	Visible(Widget child) {
+		this.child = child;
 	}
 
 	boolean mousePressed() {
-		if(Visible()) {
-			return mousePressedItem(item);
+		if(isVisible()) {
+			return child.mousePressed();
 		}
 		return false;
 	}
 	boolean mouseDragged() {
-		if(Visible()) {
-			return mouseDraggedItem(item);
+		if(isVisible()) {
+			return child.mouseDragged();
 		}
 		return false;
 	}
 	boolean mouseWheel(MouseEvent e) {
-		if(Visible()) {
-			return mouseWheelItem(item, e);
+		if(isVisible()) {
+			return child.mouseWheel(e);
 		}
 		return false;
 	}
 	void keyPressed() {
-		if(Visible()) {
-			keyPressedItem(item);
+		if(isVisible()) {
+			child.keyPressed();
 		}
 	}
-	abstract boolean Visible();
+	abstract boolean isVisible();
 
 	void draw(boolean hit) {
-		if(Visible()) {
-			drawItem(item, hit);
+		if(isVisible()) {
+			child.draw(hit);
 		}
 	}
 
 	Box getBoundary() {
-		return getItemBoundary(item);
+		return child.getBoundary();
 	}
 	
 	boolean isHit() {
-		if(Visible()) {
-	  		return getisItemHit(item);
+		if(isVisible()) {
+			return child.isHit();
 		}
 		return false;
 	}
 
 	void setXY(int xpos, int ypos) {
-		setItemXY(item, xpos, ypos);
+		child.setXY(xpos, ypos);
 	}
 	void setWH(int _width, int _height) {
-		setItemWH(item, _width, _height);
+		child.setWH(_width, _height);
 	}
 }

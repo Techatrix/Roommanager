@@ -1,5 +1,5 @@
 class Overlay {
-	Object[] items;				// array of all items in the overlay
+	Widget[] items;				// array of all items in the overlay
 	boolean visible = true;		// visibility state of the overlay
 
 	Overlay() {
@@ -8,10 +8,11 @@ class Overlay {
 		}
 	}
 	
-	void setItems(Object[] items) { // sets the items of the overlay
+	void setItems(Widget[] items) { // sets the items of the overlay
 		this.items = items;
-		for (Object item : items) {
-			setItemXY(item, 0,0); // position all items at the origin
+		for (Widget item : items) {
+			if(item == null) continue;
+			item.setXY(0,0);		// position all items at the origin
 		}
 	}
 
@@ -21,7 +22,8 @@ class Overlay {
 			boolean hit = false;
 			boolean[] h = new boolean[items.length];
 			for (int i=0;i<items.length;i++) {
-				boolean newhit = getisItemHit(items[i]);
+				if(items[i] == null) continue;
+				boolean newhit = items[i].isHit();
 				if(newhit) {
 					if(!hit) {
 						h[i] = true;
@@ -33,15 +35,17 @@ class Overlay {
 			}
 
 			for (int i=items.length-1;i>=0;i--) {
-				drawItem(items[i], h[i]); // the actual draw call
+				if(items[i] == null) continue;
+				items[i].draw(h[i]);	// the actual draw call
 			}
 		}
 	}
 
 	boolean isHit() { // return whether or not your mouse is on the overlay
 		if(visible) {
-			for (Object item : items) {
-				if(getisItemHit(item)) {
+			for (Widget item : items) {
+				if(item == null) continue;
+				if(item.isHit()) {
 					return true;
 				}
 			}
@@ -52,8 +56,9 @@ class Overlay {
 	boolean mousePressed() {
 		boolean hit = false;
 		if(visible) {
-			for (Object item : items) {
-				if(mousePressedItem(item)) {
+			for (Widget item : items) {
+				if(item == null) continue;
+				if(item.mousePressed()) {
 					hit = true;
 					return true;
 				}
@@ -62,12 +67,19 @@ class Overlay {
 		return hit;
 	}
 	void mouseReleased() {
+		if(visible) {
+			for (Widget item : items) {
+				if(item == null) continue;
+				item.mouseReleased();
+			}
+		}
 	}
 	boolean mouseDragged() {
 		boolean hit = false;
 		if(visible) {
-			for (Object item : items) {
-				if(mouseDraggedItem(item)) {
+			for (Widget item : items) {
+				if(item == null) continue;
+				if(item.mouseDragged()) {
 					hit = true;
 					return true;
 				}
@@ -77,19 +89,27 @@ class Overlay {
 	}
 	void mouseWheel(MouseEvent e) {
 		if(visible) {
-			for (Object item : items) {
-				mouseWheelItem(item, e);
+			for (Widget item : items) {
+				if(item == null) continue;
+				item.mouseWheel(e);
 			}
 		}
 	}
 	/* --------------- keyboard input --------------- */
 	void keyPressed(KeyEvent e) {
 		if(visible) {
-			for (Object item : items) {
-				keyPressedItem(item);
+			for (Widget item : items) {
+				if(item == null) continue;
+				item.keyPressed();
 			}
 		}
 	}
 	void keyReleased() {
+		if(visible) {
+			for (Widget item : items) {
+				if(item == null) continue;
+				item.keyReleased();
+			}
+		}
 	}
 }

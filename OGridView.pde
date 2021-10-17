@@ -1,19 +1,19 @@
-class GridView extends PWH implements IOverlay {
-	Object[] items;
+class GridView extends SizedWidget {
+	Widget[] children;
 	int itemheight;
 	int gridlength;
 	int off = 0;
 	//Enum dir = Dir.DOWN;
 	// TODO: include direction
 
-	GridView(Object[] items, int _width, int _height) {
-		this(items, _width, _height, 1);
+	GridView(Widget[] children, int _width, int _height) {
+		this(children, _width, _height, 1);
 	}
-	GridView(Object[] items, int _width, int _height, int gridlength) {
-		this(items, _width, _height, gridlength, _width/gridlength);
+	GridView(Widget[] children, int _width, int _height, int gridlength) {
+		this(children, _width, _height, gridlength, _width/gridlength);
 	}
-	GridView(Object[] items, int _width, int _height, int gridlength, int itemheight) {
-		this.items = items;
+	GridView(Widget[] children, int _width, int _height, int gridlength, int itemheight) {
+		this.children = children;
 		this._width = _width;
 		this._height = _height;
 		this.itemheight = itemheight;
@@ -23,8 +23,8 @@ class GridView extends PWH implements IOverlay {
 
 	boolean mousePressed() {
 		if(isHit()) {
-			for (Object item : items) {
-				mousePressedItem(item);
+			for (Widget child : children) {
+				child.mousePressed();
 			}
 		}
 		return isHit();
@@ -32,8 +32,8 @@ class GridView extends PWH implements IOverlay {
 	boolean mouseDragged() {
 		boolean hit = false;
 		if(isHit()) {
-			for (Object item : items) {
-				if(mousePressedItem(item)) {
+			for (Widget child : children) {
+				if(child.mouseDragged()) {
 					hit = true;
 				}
 			}
@@ -42,28 +42,27 @@ class GridView extends PWH implements IOverlay {
 	}
 	boolean mouseWheel(MouseEvent e) {
 		if(isHit()) {
-			int length = itemheight * ceil(items.length / (float)gridlength);
+			int length = itemheight * ceil(children.length / (float)gridlength);
 			if(length > _height) {
 				off -= e.getCount()*15;
 				off = constrain(off, _height - length, 0);
 			}
-			recalculateItems();
+			recalculateChildren();
 			return true;
 		}
 		return false;
 	}
 	void keyPressed() {
 		if(isHit()) {
-			for (Object item : items) {
-				keyPressedItem(item);
+			for (Widget child : children) {
+				child.keyPressed();
 			}
 		}
 	}
 
 	int getIndex() {
-		for (int i=0;i<items.length;i++) {
-			Object item = items[i];
-			if(mousePressedItem(item)) {
+		for (int i=0;i<children.length;i++) {
+			if(children[i].mousePressed()) {
 				return i;
 			}
 		}
@@ -81,8 +80,8 @@ class GridView extends PWH implements IOverlay {
 
 		rect(xpos, ypos, _width, _height);
 		boolean h = hit && isHit();
-		for (Object item : items) {
-			drawItem(item, h);
+		for (Widget child : children) {
+			child.draw(h);
 		}
 
 		if(c) {
@@ -101,7 +100,7 @@ class GridView extends PWH implements IOverlay {
 	void setXY(int xpos, int ypos) {
 		this.xpos = xpos;
 		this.ypos = ypos;
-		recalculateItems();
+		recalculateChildren();
 	}
 
 	void setWH(int _width, int _height) {
@@ -109,17 +108,17 @@ class GridView extends PWH implements IOverlay {
 			this._width = _width;
 			this._height = _height;
 		}
-		recalculateItems();
+		recalculateChildren();
 	}
 
-	void recalculateItems() {
-		for (int i=0;i<items.length;i++) {
-			Object item = items[i];
+	void recalculateChildren() {
+		for (int i=0;i<children.length;i++) {
+			Widget child = children[i];
 			int ih = floor(i / gridlength);
 			int iw = i % gridlength;
 
-			setItemXY(item, xpos+iw*(_width/gridlength), ypos+itemheight*ih+off);
-			setItemWH(item, _width/gridlength, itemheight);
+			child.setXY(xpos+iw*(_width/gridlength), ypos+itemheight*ih+off);
+			child.setWH(_width/gridlength, itemheight);
 		}
 	}
 	

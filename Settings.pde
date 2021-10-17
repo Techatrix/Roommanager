@@ -23,7 +23,7 @@ class Settings {
 		// these settings should explain themselves
 		strings[0] = new SettingStringValue("defaultroomname", "new room");
 		strings[1] = new SettingStringValue("language", "english");
-		strings[2] = new SettingStringValue("font", "Roboto");
+		strings[2] = new SettingStringValue("font", "Arial");
 
 		booleans[0] = new SettingBooleanValue("darkmode", true);
 		booleans[1] = new SettingBooleanValue("hideoverlay", false);

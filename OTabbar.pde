@@ -1,27 +1,27 @@
-abstract class Tabbar implements IOverlay {
-	Object list;
-	Object[] tabs;
+abstract class Tabbar extends Widget {
+	Widget list;
+	Widget[] tabs;
 
-	Tabbar(Object list, Object[] tabs) {
+	Tabbar(Widget list, Widget[] tabs) {
 		this.list = list;
 		this.tabs = tabs;
 	}
 
 	void draw(boolean hit) {
-		drawItem(list, hit);
+		list.draw(hit);
 		if(isValidTab()) {
-			drawItem(tabs[getId()], hit);
+			tabs[getIndex()].draw(hit);
 		}
 	}
 
 	boolean mousePressed() {
 		boolean hit = false;
-		if(mousePressedItem(list)) {
+		if(list.mousePressed()) {
 			hit = true;
 			onTab(getListIndex(list));
 		}
 		if(isValidTab()) {
-			if(mousePressedItem(tabs[getId()])) {
+			if(tabs[getIndex()].mousePressed()) {
 				hit = true;
 			}
 		}
@@ -29,51 +29,51 @@ abstract class Tabbar implements IOverlay {
 	}
 	boolean mouseDragged() {
 		boolean hit = false;
-		if(mouseDraggedItem(list)) {
+		if(list.mouseDragged()) {
 			hit = true;
 			onTab(getListIndex(list));
 		}
 		if(isValidTab()) {
-			if(mouseDraggedItem(tabs[getId()])) {
+			if(tabs[getIndex()].mouseDragged()) {
 				hit = true;
 			}
 		}
 		return hit;
 	}
 	boolean mouseWheel(MouseEvent e) {
-		boolean result = mouseWheelItem(list, e);
+		boolean result = list.mouseWheel(e);
 		if(isValidTab()) {
-			if(mouseWheelItem(tabs[getId()], e)) {
+			if(tabs[getIndex()].mouseWheel(e)) {
 				result = true;
 			}
 		}
 		return result;
 	}
 	void keyPressed() {
-		keyPressedItem(list);
+		list.keyPressed();
 		if(isValidTab()) {
-			keyPressedItem(tabs[getId()]);
+			tabs[getIndex()].keyPressed();
 		}
 	}
 
 	abstract void onTab(int i);
-	abstract int getId();
+	abstract int getIndex();
 
 	boolean isValidTab() {
-		return -1 < getId() && getId() < tabs.length;
+		return -1 < getIndex() && getIndex() < tabs.length;
 	}
 
 	Box getBoundary() {
-		return getItemBoundary(list);
+		return list.getBoundary();
 	}
 	
 	boolean isHit() {
 		boolean hit = false;
-		if(getisItemHit(list)) {
+		if(list.isHit()) {
 			hit = true;
 		}
 		if(isValidTab()) {
-			if(getisItemHit(tabs[getId()])) {
+			if(tabs[getIndex()].isHit()) {
 				hit = true;
 			}
 		}
@@ -81,16 +81,16 @@ abstract class Tabbar implements IOverlay {
 	}
 
 	void setXY(int xpos, int ypos) {
-		setItemXY(list, xpos, ypos);
-		for (Object tab : tabs) {
-			setItemXY(tab, xpos, ypos);
+		list.setXY(xpos, ypos);
+		for (Widget tab : tabs) {
+			tab.setXY(xpos, ypos);
 		}
 	}
 
 	void setWH(int _width, int _height) {
-		setItemWH(list, _width, _height);
-		for (Object tab : tabs) {
-			setItemWH(tab, _width, _height);
+		list.setWH(_width, _height);
+		for (Widget tab : tabs) {
+			tab.setWH(_width, _height);
 		}
 	}
 	

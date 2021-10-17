@@ -1,4 +1,4 @@
-class Text extends PWH implements IOverlay {
+class Text extends SizedWidget {
 	String text;
 	int lines;
 	int align;
@@ -46,7 +46,7 @@ class Text extends PWH implements IOverlay {
 	}
 }
 
-abstract class SetValueText extends PWH implements IOverlay {
+abstract class SetValueText extends SizedWidget {
 	String text;
 	SetValueStyle valuestyle;
 	boolean selected = false;
@@ -157,7 +157,7 @@ abstract class SetValueText extends PWH implements IOverlay {
 	}
 }
 
-abstract class GetValueText extends PWH implements IOverlay {
+abstract class GetValueText extends SizedWidget {
 	String text;
 	int align;
 

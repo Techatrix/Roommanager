@@ -1,4 +1,4 @@
-abstract class Slider extends PWH implements IOverlay {
+abstract class Slider extends SizedWidget {
 	String text;
 	boolean selected = false;
 	float value;

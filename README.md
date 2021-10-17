@@ -1,1 +1,1 @@
-PAccem is a roommanager application written in Java with Processing 3
+PAccem is a roommanager application written in Java with Processing
